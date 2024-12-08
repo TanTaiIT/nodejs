@@ -1,63 +1,78 @@
 import mongoose from "mongoose"
 
-const productSchema = new mongoose.Schema({
-  name: {
+const productSchema = mongoose.Schema({
+  _id: {
     type: String,
-    required: true,
-    trim: true
-  },
-
-  slug: {
-    type: String,
-    unique: true,
     required: true
   },
-
-  price: {
-    type: Number,
-    required: true,
+  name: {
+    type: String,
+    required: [true, 'Plase enter product name'],
     trim: true
   },
-
-  quantity: {
-    type: Number,
-    required: true,
-
-  },
-
   description: {
     type: String,
-    required: true,
-    trim: true
+    required: [true, 'Please enter product description']
   },
-  
-  offer: {
-    type: Number
+  price: {
+    type: Number,
+    required: [true, "Please enter product price"],
+    maxLength: [6, "Price can't exceed 8 figure"],
   },
-
-  productPicture: [
+  ratings: {
+    type: Number,
+    default: 0
+  },
+  images: [
     {
-      img: {
-        type: String
+      url: {
+        type: String,
+        required: true
       }
     }
   ],
-
-  category: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Category',
-    required: true
-  },
-
-  createdBy: {
-    type: mongoose.Schema.Types.ObjectId,
+  user: {
+    type: Number,
     ref: 'User',
     required: true
   },
-
-  updatedAt: Date
-}, {
-  timestamps: true
+  category: {
+    type: String,
+    required: [true, "Please enter your product category"]
+  },
+  Stock: {
+    type: Number,
+    required: [true, "Please enter stock product"]
+  },
+  numberOfReview: {
+    type: Number,
+    default: 0
+  },
+  reviews: [{
+    _id: String,
+    user: {
+      type: Number,
+      ref: 'User',
+      required: true
+    },
+    name: {
+      type: String,
+      required: true
+    },
+    rating: {
+      type: Number,
+      required: true
+    },
+    comment: {
+      type: String,
+      required: true
+    }
+  }],
+  createdAt: {
+    type: Date,
+    default: Date.now
+  }
 })
 
-export default mongoose.model('Product', productSchema)
+const productModel = mongoose.model('Product', productSchema)
+export default productModel 

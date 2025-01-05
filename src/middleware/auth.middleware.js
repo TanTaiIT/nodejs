@@ -1,8 +1,16 @@
 import { promisify } from 'util'
 import userModel from '../models/user.model.js'
-export const authUser = async (req, res, next) => {
-  const { token } = req.cookies
+import jwt from 'jsonwebtoken'
+const getAuthorizeToken = (header) => {
+  const authorizeToken = header.authorization
+  if(authorizeToken && authorizeToken.startsWith('Bearer')) {
+    return authorizeToken.split(' ')[1]
+  }
 
+  return null
+}
+export const authUser = async (req, res, next) => {
+  const token = getAuthorizeToken(req.headers)
   if (!token) {
     return res.status(401).json({
       success: false,

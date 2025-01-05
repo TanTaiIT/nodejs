@@ -54,8 +54,6 @@ export const login = async (req, res) => {
   try {
     const { email, password } = req.body
 
-    console.log('email', email)
-    console.log('password', password)
     if (!email || !password) {
       return res.status(400).json({ success: false, messsage: 'Please enter your email or password' })
     }
@@ -69,7 +67,6 @@ export const login = async (req, res) => {
     }
 
     const isPasswordMatch = await user.comparePassword(password)
-    console.log('compare', isPasswordMatch)
     if (!isPasswordMatch) {
       return res.status(400).json({
         success: false,
@@ -91,7 +88,8 @@ export const login = async (req, res) => {
 
     res.status(201).cookie('token', token, options).json({
       success: true,
-      data: user
+      data: user,
+      token: token
     })
   } catch (error) {
     res.status(400).json({ message: error.messsage })

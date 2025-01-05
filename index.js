@@ -10,10 +10,12 @@ import bodyParser from 'body-parser'
 // route
 import productRouter from './src/routes/product.route.js'
 import authRoute from './src/routes/auth.route.js'
+import categoryRouter from './src/routes/category.route.js'
 env.config()
 const __dirname = dirname(import.meta.url)
 const corsOptions = {
-  origin: 'http://localhost:3000',
+  origin: 'http://localhost:5000',
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true,
   optionsSuccessStatus: 200
 }
@@ -22,8 +24,9 @@ const port = 3000
 app.use(express.json())
 app.use(productRouter)
 app.use(authRoute)
+app.use(categoryRouter)
 app.use(morgan('dev'))
-app.use(cors())
+app.use(cors(corsOptions))
 app.use(bodyParser.json())
 app.use(express.static(path.join(__dirname, 'uploads')))
 connect().then(() => {
@@ -32,7 +35,6 @@ connect().then(() => {
   console.log('Error connecting to MongoDB', error)
 })
 
-
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
-})
+})        

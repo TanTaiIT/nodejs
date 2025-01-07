@@ -84,3 +84,44 @@ export const createProduct = async (req, res) => {
   }
   
 }
+
+export const deleteProduct = async(req, res) => {
+  try {
+    const { id } = req.body
+    const product = await Product.findByIdAndDelete(id)
+    if(!product) {
+      return res.status(400).json({message: 'product delete fail'})
+    }
+
+    res.status(200).json({message: 'success'})
+  } catch (error) {
+    res.status(400).json({message: error.message})
+  }
+}
+
+export const updateProduct = async(req, res) => {
+  try {
+    const { id, name, description, price, ratings, category, Stock } = req.body
+    let images = req.files.images.length
+    const productById = await Product.findById(id)
+    if(!productById) {
+      return res.status(400).json({message: 'product not found'})
+    }
+    if(!images) {
+      productById.images = images
+    } else {
+      const file = req.files.images.map(file => {
+        return file.path
+      }) 
+
+      images = file
+    }
+    const product = await Product.findByIdAndUpdate(id, { name, description, price, ratings, category, Stock, images })
+    if(!product) {
+      return res.status(200).json({message:'product update fail'})
+    }
+    res.status(200).json({message: 'success', product})
+  } catch (error) {
+    res.status(400).json({message: error.message})
+  }
+}

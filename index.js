@@ -11,6 +11,7 @@ import bodyParser from 'body-parser'
 import productRouter from './src/routes/product.route.js'
 import authRoute from './src/routes/auth.route.js'
 import categoryRouter from './src/routes/category.route.js'
+import summaryRouter from './src/routes/summary.route.js'
 env.config()
 const __dirname = dirname(import.meta.url)
 const corsOptions = {
@@ -25,6 +26,7 @@ app.use(express.json())
 app.use(productRouter)
 app.use(authRoute)
 app.use(categoryRouter)
+app.use(summaryRouter)
 app.use(morgan('dev'))
 app.use(cors(corsOptions))
 app.use(bodyParser.json())

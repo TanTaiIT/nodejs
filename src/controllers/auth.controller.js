@@ -107,3 +107,12 @@ export const logout = (req, res) => {
     messsge: "User logout"
   })
 }
+
+export const getAllUsers = async(req, res) => {
+  try {
+    const users = await userModel.find() || []
+    res.status(200).json({message: 'success', data: users})
+  } catch (error) {
+    res.status(400).json({message: error.message})
+  }
+}
